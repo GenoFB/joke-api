@@ -28,10 +28,50 @@ app.get("/filter", (req, res) => {
 });
 
 //4. POST a new joke
+app.post("/jokes", (req, res) => {
+  const newJoke = {
+    id: ++jokes.length,
+    jokeText: req.body.text,
+    type: req.body.type,
+  };
+
+  jokes.push(newJoke);
+  console.log(jokes.slice(-1));
+  res.json(newJoke);
+});
 
 //5. PUT a joke
+app.put("/jokes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const putJoke = {
+    id: id,
+    jokeText: req.body.text,
+    type: req.body.type,
+  };
+  const searchIndex = jokes.findIndex(j => j.id === id);
+  jokes[searchIndex] = putJoke;
+
+  res.json(jokes[searchIndex]);
+
+});
 
 //6. PATCH a joke
+app.patch("/jokes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const existingJoke = jokes.find(j => j.id === id);
+  const patchJoke = {
+    id: id,
+    jokeText: req.body.text || existingJoke.jokeText,
+    type: req.body.type || existingJoke.jokeType,
+  };
+  const searchIndex = jokes.findIndex(j => j.id === id);
+  jokes[searchIndex] = patchJoke;
+
+  console.log(jokes[searchIndex]);
+  res.json(patchJoke);
+
+});
+
 
 //7. DELETE Specific joke
 
